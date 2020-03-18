@@ -57,6 +57,11 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.47'
     compile 'org.apache.commons:commons-lang3'
 
+    //七牛云
+    compile 'com.qiniu:qiniu-java-sdk:7.2.27'
+    // Google GSON
+    compile 'com.google.code.gson:gson:2.6.2'
+
 }
 
 //设置后依赖不用写版本号
