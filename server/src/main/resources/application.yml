@@ -22,3 +22,13 @@ logging:
   path: ./logs
   level:
     com.abc.dao: debug
+
+
+wx:
+  miniapp:
+    configs:
+      - appid: wx0a159bf1ae8eadbf
+        secret: 3de1de08ae9a223bc8a32bb7dcac81ea
+        token: #微信小程序消息服务器配置的token
+        aesKey: #微信小程序消息服务器配置的EncodingAESKey
+        msgDataFormat: JSON
