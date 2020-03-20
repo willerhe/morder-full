@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.abc.entity.User">
+<mapper namespace="com.abc.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.abc.entity.Goods">
     <constructor>
       <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="nick_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="detail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="price" javaType="java.lang.Float" jdbcType="REAL" />
+      <arg column="cover_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="created" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="tag" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="is_deleted" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="openid" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="gender" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="phone_number" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="avatar_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -73,15 +73,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, nick_name, created, is_deleted, openid, gender, phone_number, city, avatar_url
+    id, title, detail, price, cover_url, created, tag, is_deleted, type
   </sql>
-  <select id="selectByExample" parameterType="com.abc.entity.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.abc.entity.GoodsExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from user
+    from goods
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,125 +92,125 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from user
+    from goods
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from user
+    delete from goods
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.abc.entity.UserExample">
-    delete from user
+  <delete id="deleteByExample" parameterType="com.abc.entity.GoodsExample">
+    delete from goods
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.abc.entity.User">
-    insert into user (id, nick_name, created, 
-      is_deleted, openid, gender, 
-      phone_number, city, avatar_url
+  <insert id="insert" parameterType="com.abc.entity.Goods">
+    insert into goods (id, title, detail, 
+      price, cover_url, created, 
+      tag, is_deleted, type
       )
-    values (#{id,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
+      #{price,jdbcType=REAL}, #{coverUrl,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
+      #{tag,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.abc.entity.User">
-    insert into user
+  <insert id="insertSelective" parameterType="com.abc.entity.Goods">
+    insert into goods
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="nickName != null">
-        nick_name,
+      <if test="title != null">
+        title,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="coverUrl != null">
+        cover_url,
       </if>
       <if test="created != null">
         created,
       </if>
+      <if test="tag != null">
+        tag,
+      </if>
       <if test="isDeleted != null">
         is_deleted,
       </if>
-      <if test="openid != null">
-        openid,
-      </if>
-      <if test="gender != null">
-        gender,
-      </if>
-      <if test="phoneNumber != null">
-        phone_number,
-      </if>
-      <if test="city != null">
-        city,
-      </if>
-      <if test="avatarUrl != null">
-        avatar_url,
+      <if test="type != null">
+        type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="nickName != null">
-        #{nickName,jdbcType=VARCHAR},
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="coverUrl != null">
+        #{coverUrl,jdbcType=VARCHAR},
       </if>
       <if test="created != null">
         #{created,jdbcType=TIMESTAMP},
       </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
       <if test="isDeleted != null">
         #{isDeleted,jdbcType=INTEGER},
       </if>
-      <if test="openid != null">
-        #{openid,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        #{gender,jdbcType=INTEGER},
-      </if>
-      <if test="phoneNumber != null">
-        #{phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="avatarUrl != null">
-        #{avatarUrl,jdbcType=VARCHAR},
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.abc.entity.UserExample" resultType="java.lang.Long">
-    select count(*) from user
+  <select id="countByExample" parameterType="com.abc.entity.GoodsExample" resultType="java.lang.Long">
+    select count(*) from goods
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update goods
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.nickName != null">
-        nick_name = #{record.nickName,jdbcType=VARCHAR},
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detail != null">
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=REAL},
+      </if>
+      <if test="record.coverUrl != null">
+        cover_url = #{record.coverUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.created != null">
         created = #{record.created,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.tag != null">
+        tag = #{record.tag,jdbcType=VARCHAR},
+      </if>
       <if test="record.isDeleted != null">
         is_deleted = #{record.isDeleted,jdbcType=INTEGER},
       </if>
-      <if test="record.openid != null">
-        openid = #{record.openid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gender != null">
-        gender = #{record.gender,jdbcType=INTEGER},
-      </if>
-      <if test="record.phoneNumber != null">
-        phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="record.city != null">
-        city = #{record.city,jdbcType=VARCHAR},
-      </if>
-      <if test="record.avatarUrl != null">
-        avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -218,62 +218,60 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
+    update goods
     set id = #{record.id,jdbcType=VARCHAR},
-      nick_name = #{record.nickName,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=REAL},
+      cover_url = #{record.coverUrl,jdbcType=VARCHAR},
       created = #{record.created,jdbcType=TIMESTAMP},
+      tag = #{record.tag,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=INTEGER},
-      openid = #{record.openid,jdbcType=VARCHAR},
-      gender = #{record.gender,jdbcType=INTEGER},
-      phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
-      city = #{record.city,jdbcType=VARCHAR},
-      avatar_url = #{record.avatarUrl,jdbcType=VARCHAR}
+      type = #{record.type,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.abc.entity.User">
-    update user
+  <update id="updateByPrimaryKeySelective" parameterType="com.abc.entity.Goods">
+    update goods
     <set>
-      <if test="nickName != null">
-        nick_name = #{nickName,jdbcType=VARCHAR},
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=REAL},
+      </if>
+      <if test="coverUrl != null">
+        cover_url = #{coverUrl,jdbcType=VARCHAR},
       </if>
       <if test="created != null">
         created = #{created,jdbcType=TIMESTAMP},
       </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
       <if test="isDeleted != null">
         is_deleted = #{isDeleted,jdbcType=INTEGER},
       </if>
-      <if test="openid != null">
-        openid = #{openid,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        gender = #{gender,jdbcType=INTEGER},
-      </if>
-      <if test="phoneNumber != null">
-        phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="avatarUrl != null">
-        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.abc.entity.User">
-    update user
-    set nick_name = #{nickName,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.abc.entity.Goods">
+    update goods
+    set title = #{title,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      price = #{price,jdbcType=REAL},
+      cover_url = #{coverUrl,jdbcType=VARCHAR},
       created = #{created,jdbcType=TIMESTAMP},
+      tag = #{tag,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=INTEGER},
-      openid = #{openid,jdbcType=VARCHAR},
-      gender = #{gender,jdbcType=INTEGER},
-      phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      avatar_url = #{avatarUrl,jdbcType=VARCHAR}
+      type = #{type,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-
-
 </mapper>

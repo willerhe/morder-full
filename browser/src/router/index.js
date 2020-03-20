@@ -61,7 +61,14 @@ export const asyncRouterMap = [
       name: 'goods',
       component: _import('menu/menu1'),
       meta: { perm:'m:goods', title: '商品', icon: 'icon' }
-    }]
+    },{
+      path: 'add',
+      name: 'add',
+      hidden:true,
+      component: _import('menu/menu1_add'),
+      meta: { perm:'m:goods:add', title: '添加商品', icon: 'icon' }
+    },
+    ]
   },
   {
     path: '/queue',
