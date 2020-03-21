@@ -46,21 +46,22 @@ public class UserController {
             UserExample e = new UserExample();
             UserExample.Criteria c = e.createCriteria();
             c.andOpenidEqualTo(session.getOpenid());
-            List<User> ul =userMapper.selectByExample(e);
-            if(ul.size() == 0){
+            List<User> ul = userMapper.selectByExample(e);
+            if (ul.size() == 0) {
                 // 插入
                 userInfo.setOpenid(session.getOpenid());
                 userInfo.setIsDeleted(0);
                 userInfo.setId(UUID.randomUUID().toString());
                 userMapper.insert(userInfo);
-            }else{
-                // todo 更新
+            } else {
+                c.andOpenidEqualTo(session.getOpenid());
+                userInfo = userMapper.selectByExample(e).get(0);
             }
 
 //            this.logger.info(session.getSessionKey());
 //            this.logger.info(session.getOpenid());
             //TODO 可以增加自己的逻辑，关联业务相关数据
-            return session;
+            return userInfo;
         } catch (WxErrorException e) {
             return e.toString();
         }

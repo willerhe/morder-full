@@ -35,6 +35,9 @@ public class GoodsImpl implements GoodsService {
         GoodsExample e = new GoodsExample();
         GoodsExample.Criteria c = e.createCriteria();
         c.andIsDeletedEqualTo(0);
+        if (goods.getType() != null){
+            c.andTypeEqualTo(goods.getType());
+        }
 
         return goodsMapper.selectByExample(e);
     }
