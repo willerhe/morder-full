@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc.dao.OrderMapper">
-  <resultMap id="BaseResultMap" type="com.abc.entity.Order">
+<mapper namespace="com.abc.dao.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.abc.entity.Orders">
     <constructor>
       <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="created" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -11,11 +11,33 @@
       <arg column="number" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="comment_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="total" javaType="java.lang.Float" jdbcType="REAL" />
-      <arg column="meta" javaType="java.lang.Object" jdbcType="OTHER" />
       <arg column="cover_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="uid" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="queue" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="queue_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="code" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.abc.entity.Orders">
+    <constructor>
+      <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="created" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="detail" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_deleted" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="number" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="comment_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="total" javaType="java.lang.Float" jdbcType="REAL" />
+      <arg column="cover_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="uid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="queue" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="queue_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="code" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="meta" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -77,16 +99,21 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, created, title, detail, is_deleted, number, comment_count, total, meta, cover_url, 
-    uid, remark, queue
+    id, created, title, detail, is_deleted, number, comment_count, total, cover_url, 
+    uid, remark, queue, queue_type, status, code
   </sql>
-  <select id="selectByExample" parameterType="com.abc.entity.OrderExample" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    meta
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.abc.entity.OrdersExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order
+    ,
+    <include refid="Blob_Column_List" />
+    from orders
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,36 +121,54 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.abc.entity.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
-    from order
+    ,
+    <include refid="Blob_Column_List" />
+    from orders
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from order
+    delete from orders
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.abc.entity.OrderExample">
-    delete from order
+  <delete id="deleteByExample" parameterType="com.abc.entity.OrdersExample">
+    delete from orders
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.abc.entity.Order">
-    insert into order (id, created, title, 
+  <insert id="insert" parameterType="com.abc.entity.Orders">
+    insert into orders (id, created, title, 
       detail, is_deleted, number, 
-      comment_count, total, meta, 
-      cover_url, uid, remark, 
-      queue)
+      comment_count, total, cover_url, 
+      uid, remark, queue, 
+      queue_type, status, code, 
+      meta)
     values (#{id,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
       #{detail,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR}, 
-      #{commentCount,jdbcType=INTEGER}, #{total,jdbcType=REAL}, #{meta,jdbcType=OTHER}, 
-      #{coverUrl,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{queue,jdbcType=INTEGER})
+      #{commentCount,jdbcType=INTEGER}, #{total,jdbcType=REAL}, #{coverUrl,jdbcType=VARCHAR}, 
+      #{uid,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{queue,jdbcType=INTEGER}, 
+      #{queueType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{code,jdbcType=INTEGER}, 
+      #{meta,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.abc.entity.Order">
-    insert into order
+  <insert id="insertSelective" parameterType="com.abc.entity.Orders">
+    insert into orders
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -149,9 +194,6 @@
       <if test="total != null">
         total,
       </if>
-      <if test="meta != null">
-        meta,
-      </if>
       <if test="coverUrl != null">
         cover_url,
       </if>
@@ -163,6 +205,18 @@
       </if>
       <if test="queue != null">
         queue,
+      </if>
+      <if test="queueType != null">
+        queue_type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="meta != null">
+        meta,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -190,9 +244,6 @@
       <if test="total != null">
         #{total,jdbcType=REAL},
       </if>
-      <if test="meta != null">
-        #{meta,jdbcType=OTHER},
-      </if>
       <if test="coverUrl != null">
         #{coverUrl,jdbcType=VARCHAR},
       </if>
@@ -205,16 +256,28 @@
       <if test="queue != null">
         #{queue,jdbcType=INTEGER},
       </if>
+      <if test="queueType != null">
+        #{queueType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=INTEGER},
+      </if>
+      <if test="meta != null">
+        #{meta,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.abc.entity.OrderExample" resultType="java.lang.Long">
-    select count(*) from order
+  <select id="countByExample" parameterType="com.abc.entity.OrdersExample" resultType="java.lang.Long">
+    select count(*) from orders
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order
+    update orders
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
@@ -240,9 +303,6 @@
       <if test="record.total != null">
         total = #{record.total,jdbcType=REAL},
       </if>
-      <if test="record.meta != null">
-        meta = #{record.meta,jdbcType=OTHER},
-      </if>
       <if test="record.coverUrl != null">
         cover_url = #{record.coverUrl,jdbcType=VARCHAR},
       </if>
@@ -255,13 +315,25 @@
       <if test="record.queue != null">
         queue = #{record.queue,jdbcType=INTEGER},
       </if>
+      <if test="record.queueType != null">
+        queue_type = #{record.queueType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=INTEGER},
+      </if>
+      <if test="record.meta != null">
+        meta = #{record.meta,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
-    update order
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update orders
     set id = #{record.id,jdbcType=VARCHAR},
       created = #{record.created,jdbcType=TIMESTAMP},
       title = #{record.title,jdbcType=VARCHAR},
@@ -270,17 +342,41 @@
       number = #{record.number,jdbcType=VARCHAR},
       comment_count = #{record.commentCount,jdbcType=INTEGER},
       total = #{record.total,jdbcType=REAL},
-      meta = #{record.meta,jdbcType=OTHER},
       cover_url = #{record.coverUrl,jdbcType=VARCHAR},
       uid = #{record.uid,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
-      queue = #{record.queue,jdbcType=INTEGER}
+      queue = #{record.queue,jdbcType=INTEGER},
+      queue_type = #{record.queueType,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=INTEGER},
+      meta = #{record.meta,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.abc.entity.Order">
-    update order
+  <update id="updateByExample" parameterType="map">
+    update orders
+    set id = #{record.id,jdbcType=VARCHAR},
+      created = #{record.created,jdbcType=TIMESTAMP},
+      title = #{record.title,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=INTEGER},
+      number = #{record.number,jdbcType=VARCHAR},
+      comment_count = #{record.commentCount,jdbcType=INTEGER},
+      total = #{record.total,jdbcType=REAL},
+      cover_url = #{record.coverUrl,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      queue = #{record.queue,jdbcType=INTEGER},
+      queue_type = #{record.queueType,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.abc.entity.Orders">
+    update orders
     <set>
       <if test="created != null">
         created = #{created,jdbcType=TIMESTAMP},
@@ -303,9 +399,6 @@
       <if test="total != null">
         total = #{total,jdbcType=REAL},
       </if>
-      <if test="meta != null">
-        meta = #{meta,jdbcType=OTHER},
-      </if>
       <if test="coverUrl != null">
         cover_url = #{coverUrl,jdbcType=VARCHAR},
       </if>
@@ -318,11 +411,23 @@
       <if test="queue != null">
         queue = #{queue,jdbcType=INTEGER},
       </if>
+      <if test="queueType != null">
+        queue_type = #{queueType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=INTEGER},
+      </if>
+      <if test="meta != null">
+        meta = #{meta,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.abc.entity.Order">
-    update order
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.abc.entity.Orders">
+    update orders
     set created = #{created,jdbcType=TIMESTAMP},
       title = #{title,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR},
@@ -330,11 +435,33 @@
       number = #{number,jdbcType=VARCHAR},
       comment_count = #{commentCount,jdbcType=INTEGER},
       total = #{total,jdbcType=REAL},
-      meta = #{meta,jdbcType=OTHER},
       cover_url = #{coverUrl,jdbcType=VARCHAR},
       uid = #{uid,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      queue = #{queue,jdbcType=INTEGER}
+      queue = #{queue,jdbcType=INTEGER},
+      queue_type = #{queueType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      code = #{code,jdbcType=INTEGER},
+      meta = #{meta,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <update id="updateByPrimaryKey" parameterType="com.abc.entity.Orders">
+    update orders
+    set created = #{created,jdbcType=TIMESTAMP},
+      title = #{title,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=INTEGER},
+      number = #{number,jdbcType=VARCHAR},
+      comment_count = #{commentCount,jdbcType=INTEGER},
+      total = #{total,jdbcType=REAL},
+      cover_url = #{coverUrl,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      queue = #{queue,jdbcType=INTEGER},
+      queue_type = #{queueType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      code = #{code,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
 </mapper>

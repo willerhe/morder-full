@@ -2,7 +2,7 @@ package com.abc.entity;
 
 import java.util.Date;
 
-public class Order {
+public class Orders {
     private String id;
 
     private Date created;
@@ -19,8 +19,6 @@ public class Order {
 
     private Float total;
 
-    private Object meta;
-
     private String coverUrl;
 
     private String uid;
@@ -29,7 +27,15 @@ public class Order {
 
     private Integer queue;
 
-    public Order(String id, Date created, String title, String detail, Integer isDeleted, String number, Integer commentCount, Float total, Object meta, String coverUrl, String uid, String remark, Integer queue) {
+    private String queueType;
+
+    private String status;
+
+    private Integer code;
+
+    private String meta;
+
+    public Orders(String id, Date created, String title, String detail, Integer isDeleted, String number, Integer commentCount, Float total, String coverUrl, String uid, String remark, Integer queue, String queueType, String status, Integer code, String meta) {
         this.id = id;
         this.created = created;
         this.title = title;
@@ -38,14 +44,17 @@ public class Order {
         this.number = number;
         this.commentCount = commentCount;
         this.total = total;
-        this.meta = meta;
         this.coverUrl = coverUrl;
         this.uid = uid;
         this.remark = remark;
         this.queue = queue;
+        this.queueType = queueType;
+        this.status = status;
+        this.code = code;
+        this.meta = meta;
     }
 
-    public Order() {
+    public Orders() {
         super();
     }
 
@@ -113,14 +122,6 @@ public class Order {
         this.total = total;
     }
 
-    public Object getMeta() {
-        return meta;
-    }
-
-    public void setMeta(Object meta) {
-        this.meta = meta;
-    }
-
     public String getCoverUrl() {
         return coverUrl;
     }
@@ -151,5 +152,37 @@ public class Order {
 
     public void setQueue(Integer queue) {
         this.queue = queue;
+    }
+
+    public String getQueueType() {
+        return queueType;
+    }
+
+    public void setQueueType(String queueType) {
+        this.queueType = queueType == null ? null : queueType.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMeta() {
+        return meta;
+    }
+
+    public void setMeta(String meta) {
+        this.meta = meta == null ? null : meta.trim();
     }
 }
